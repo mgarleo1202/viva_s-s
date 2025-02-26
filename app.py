@@ -8,20 +8,14 @@ import pymysql
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
-app.config['SECRET_KEY'] = 'QzGb83H37KCKzJd6Y&B34zHLq6U^xewG'
-#app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 DB_CONFIG = {
-    'host': '138.199.147.210',
-    'user': 'chat',
-    'password': 'bolson',
-    'database': 'registros',
-    'port': 3306
-#    'host': os.getenv('DB_HOST'),
-#    'user': os.getenv('DB_USER'),
-#    'password': os.getenv('DB_PASSWORD'),
-#    'database': os.getenv('DB_DATABASE'),
-#    'port': int(os.getenv('DB_PORT', 3306))
+    'host': os.getenv('DB_HOST'),
+    'user': os.getenv('DB_USER'),
+    'password': os.getenv('DB_PASSWORD'),
+    'database': os.getenv('DB_DATABASE'),
+    'port': int(os.getenv('DB_PORT', 3306))
 }
 
 def get_db_connection():
