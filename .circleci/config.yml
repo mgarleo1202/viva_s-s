@@ -38,6 +38,10 @@ jobs:
             mkdir -p ~/.ssh
             ssh-keyscan -H $VPS_IP >> ~/.ssh/known_hosts
       - run:
+          name: Instalar sshpass
+          command: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - run:
           name: Ejecutar playbook de Ansible
           command: |
             sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP \
