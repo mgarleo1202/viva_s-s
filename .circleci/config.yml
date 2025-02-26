@@ -7,7 +7,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker:
-          version: 20.10.14
+          docker_layer_caching: true  # Habilita la caché de capas de Docker
       - run:
           name: Construir imagen de Docker
           command: |
