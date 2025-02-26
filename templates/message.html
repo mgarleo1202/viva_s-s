@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+        crossorigin="anonymous"></script>
+    <title>Chat</title>
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.messages {
+    max-width: 100%;
+    margin: 0 auto;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    height: 400px; /* Altura fija para el contenedor de mensajes */
+    overflow-y: auto; /* Permite el desplazamiento vertical */
+}
+
+input[type="text"] {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    display: block; /* Para que el input esté en una nueva línea */
+    margin-left: auto; /* Centrar el input */
+    margin-right: auto; /* Centrar el input */
+}
+
+input[type="text"]:focus {
+    border-color: #007BFF; /* Cambia el color del borde al enfocar */
+    outline: none; /* Elimina el contorno por defecto */
+}
+
+p {
+    margin: 5px 0; /* Espaciado entre los mensajes */
+    color: #555; /* Color del texto de los mensajes */
+}
+</style>
+
+</head>
+
+<body>
+    <h1>Bienvenido al chat, {{ user }}</h1> <!-- Muestra el nombre del usuario -->
+    <div class="messages" style="margin-bottom: 20px;">
+        <!-- Aquí se mostrarán los mensajes almacenados -->
+        {% for nombre, mensaje in messages %}
+            <p><strong>{{ nombre }}:</strong> {{ mensaje }}</p>
+        {% endfor %}
+    </div>
+    <input placeholder="Escribe un mensaje..." id="messageInput" style="width: 300px; padding: 10px;" />
+
+    <script>
+        // Conexión a WebSocket
+        const socket = io();
+
+        // Obtenemos el contenedor donde se mostrarán los mensajes
+        let messageContainer = document.querySelector(".messages");
+
+        // Cuando se conecta el cliente al servidor
+        socket.on("connect", () => {
+            let p = document.createElement("p");
+            p.innerText = "";
+            messageContainer.appendChild(p);
+        });
+
+        // Enviar mensaje cuando se presiona "Enter" en el input
+        let messageInput = document.getElementById("messageInput");
+        messageInput.addEventListener("keypress", (e) => {
+            if (e.which === 13 && messageInput.value.trim() !== "") {
+                let username = "{{ user }}";  // Se obtiene el nombre del usuario
+                socket.emit("message", { user: username, message: messageInput.value });
+                messageInput.value = "";  // Limpiar el campo de entrada
+            }
+        });
+
+        // Mostrar los mensajes cuando son recibidos
+        socket.on("message", (data) => {
+            let messageElement = document.createElement("p");
+            messageElement.innerText = `${data.user}: ${data.message}`;  // Formato: usuario: mensaje
+            messageContainer.appendChild(messageElement);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestor de Tareas</title>
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Encabezado principal */
+h1 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+/* Formulario */
+form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input, button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+/* Listas de tareas */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+li strong {
+    color: #2c3e50;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: #ddd;
+    margin: 10px 0;
+}
+
+/* Enlaces de acción */
+a {
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+a[href*="completar_tarea"] {
+    background-color: #2ecc71;
+    color: white;
+}
+
+a[href*="completar_tarea"]:hover {
+    background-color: #27ae60;
+}
+
+a[href*="eliminar_tarea"] {
+    background-color: #e74c3c;
+    color: white;
+}
+
+a[href*="eliminar_tarea"]:hover {
+    background-color: #c0392b;
+}
+
+/* Secciones */
+h2 {
+    color: #34495e;
+    text-align: center;
+    margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+    form {
+        width: 100%;
+    }
+
+    input, button {
+        width: 100%;
+    }
+}
+
+
+</style>
+
+
+</head>
+<body>
+    <h1>Gestor de Tareas</h1>
+
+    <h2>Agregar Nueva Tarea</h2>
+    <form action="{{ url_for('agregar_tarea') }}" method="post">
+        <input type="text" name="tarea" placeholder="Nombre de la tarea" required>
+        <input type="text" name="descripcion" placeholder="Descripción">
+        <input type="date" name="fecha" required>
+        <input type="date" name="fecha_caducidad">
+        <button type="submit">Agregar</button>
+    </form>
+
+    <h2>Tareas Pendientes</h2>
+    <ul>
+        {% for tarea in pendientes %}
+            <li>
+                <strong>{{ tarea[1] }}</strong> ({{ tarea[4] }} → Expira: {{ tarea[5] }})  
+                <br> Descripción: {{ tarea[2] }}  
+                <br> Creado por: {{ tarea[6] }}
+                <br>
+                <a href="{{ url_for('completar_tarea', tarea_id=tarea[0]) }}">✅ Completar</a>
+                <a href="{{ url_for('eliminar_tarea', tarea_id=tarea[0]) }}">❌ Eliminar</a>
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+
+    <h2>Tareas Completadas</h2>
+    <ul>
+        {% for tarea in completadas %}
+            <li>
+                <strong>{{ tarea[1] }}</strong> ({{ tarea[4] }} → Expira: {{ tarea[5] }})  
+                <br> Descripción: {{ tarea[2] }}  
+                <br> Creado por: {{ tarea[6] }}
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+</body>
+</html>

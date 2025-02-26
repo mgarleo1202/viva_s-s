@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestor de Tareas</title>
+</head>
+<body>
+    <h1>Gestor de Tareas</h1>
+
+    <h2>Agregar Nueva Tarea</h2>
+    <form action="{{ url_for('agregar_tarea') }}" method="post">
+        <input type="text" name="tarea" placeholder="Nombre de la tarea" required>
+        <input type="text" name="descripcion" placeholder="Descripción">
+        <input type="date" name="fecha" required>
+        <input type="date" name="fecha_caducidad">
+        <button type="submit">Agregar</button>
+    </form>
+
+    <h2>Tareas Pendientes</h2>
+    <ul>
+        {% for tarea in pendientes %}
+            <li>
+                {{ tarea[1] }} - {{ tarea[2] }} 
+                <a href="{{ url_for('completar_tarea', tarea_id=tarea[0]) }}">✅ Completar</a>
+                <a href="{{ url_for('eliminar_tarea', tarea_id=tarea[0]) }}">❌ Eliminar</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Tareas Completadas</h2>
+    <ul>
+        {% for tarea in completadas %}
+            <li>{{ tarea[1] }} - {{ tarea[2] }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
