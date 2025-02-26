@@ -9,14 +9,6 @@ jobs:
       - setup_remote_docker:
           version: 20.10.14
       - run:
-          name: Instalar Docker cliente
-          command: |
-            set -x
-            VER="20.10.9"
-            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-            sudo mv /tmp/docker/* /usr/bin
-      - run:
           name: Construir imagen de Docker
           command: |
             docker build -t $DOCKER_USERNAME/vvflask:latest .
@@ -39,7 +31,7 @@ jobs:
             pip install ansible
       - add_ssh_keys:
           fingerprints:
-            - "${SSH_KEY_FINGERPRINT}"  # Necesitarás configurar esto en CircleCI
+            - "${SSH_KEY_FINGERPRINT}"
       - run:
           name: Configurar known_hosts
           command: |
@@ -64,7 +56,3 @@ workflows:
           filters:
             branches:
               only: main
-
-
-
-
