@@ -46,7 +46,6 @@ jobs:
           command: |
             sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP \
             'cd /home/sylvana/ansibles/ && ansible-playbook -i inventory.ini playbook.yml'
-#            ssh $VPS_USER@$VPS_IP "cd /home/sylvana/ansibles/ && ansible-playbook -i inventory.ini playbook.yml"
 
 workflows:
   version: 2
